@@ -25,6 +25,7 @@ void DecisionMaker::printDecisionData(DecisionData & data)
 	std::cerr<<"angolo: "<<data.angolo<<std::endl;
 	std::cerr<<"omega: "<<data.omega<<std::endl;
 }
+
 void DecisionMaker::analyzeDecisions(bool dead)
 {
 
