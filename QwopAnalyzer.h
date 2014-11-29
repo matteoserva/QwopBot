@@ -36,9 +36,7 @@ class QwopAnalyzer
 
 	void processFeet(std::vector<cv::Point> &);
 	void calculateVariables();
-	void gestisciMorte();
 	std::vector<unsigned int> risultati;
-	int numeroFunzione;
 	DecisionMaker decisionMaker;
 	static const float distTestaBacino;
 	static const float centroY;

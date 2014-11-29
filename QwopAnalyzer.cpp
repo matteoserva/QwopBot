@@ -21,7 +21,7 @@ std::pair<int,float> findNearest(std::vector<cv::Point> lista,cv::Point punto)
 {
 	std::pair<int,float> result(-1,800.0);
 
-	for(int i = 0; i<lista.size(); i++) {
+	for(unsigned int i = 0; i<lista.size(); i++) {
 		float dist = distance(lista[i],punto);
 		if(dist < result.second) {
 			result.first = i;
@@ -94,7 +94,7 @@ void QwopAnalyzer::processFeet(std::vector<cv::Point> &piedi)
 
 void QwopAnalyzer::calculateVariables()
 {
-	terra = shoe1.y > screenHeight - shoeHeightThresh || shoe2.y > screenHeight-shoeHeightThresh;
+	terra = shoe1.y > (int)screenHeight - shoeHeightThresh || shoe2.y > screenHeight-shoeHeightThresh;
 
 
 
@@ -115,8 +115,6 @@ void QwopAnalyzer::calculateVariables()
 		float distDueTre = distance(bacino2,bacino3);
 		float distUnoTre = distance(bacino1,bacino3);
 
-
-		int worst = 3;
 		if(distUnoTre < distUnoDue && distUnoTre < distDueTre ) {
 			//esclude 2
 			bacino = Point((bacino1.x + bacino3.x)/2,(bacino1.y + bacino3.y)/2);
@@ -252,24 +250,7 @@ void QwopAnalyzer::processData(const std::vector<std::pair<char,cv::Point> > &da
 
 	oddIteration = !oddIteration;
 }
-void QwopAnalyzer::gestisciMorte()
-{
-	if(numeroFunzione < 0) {
-		numeroFunzione = 0;
-		return;
-	}
-	if(step > 4)
-		risultati[numeroFunzione] = risultati[numeroFunzione] + step/4;
-	numeroFunzione++;
-	if(numeroFunzione > 1)
-		numeroFunzione = 0;
 
-	for(int i = 0; i < risultati.size(); i++)
-		std::cerr << "risultato "<<i<<":  "<<risultati[i]<<std::endl;
-
-	std::cerr <<"compiuti passi" <<step<<std::endl;
-	step = 0;
-}
 void QwopAnalyzer::reset()
 {
 	if(!running) {
@@ -282,7 +263,6 @@ void QwopAnalyzer::reset()
 	decisionMaker.newTurn();
 
 
-	gestisciMorte();
 }
 bool QwopAnalyzer::needStep()
 {
@@ -314,6 +294,5 @@ QwopAnalyzer::QwopAnalyzer()
 	screenHeight = 400;
 	elapsed = 0.1;
 	risultati.resize(2);
-	numeroFunzione = -1;
 	running = false;
 }

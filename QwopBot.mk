@@ -91,7 +91,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM "main.cpp"
 
@@ -99,7 +99,7 @@ $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) "main.cpp"
 
 $(IntermediateDirectory)/ScreenGrabber.cpp$(ObjectSuffix): ScreenGrabber.cpp $(IntermediateDirectory)/ScreenGrabber.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "ScreenGrabber.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/ScreenGrabber.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/ScreenGrabber.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/ScreenGrabber.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/ScreenGrabber.cpp$(DependSuffix): ScreenGrabber.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/ScreenGrabber.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/ScreenGrabber.cpp$(DependSuffix) -MM "ScreenGrabber.cpp"
 
@@ -107,7 +107,7 @@ $(IntermediateDirectory)/ScreenGrabber.cpp$(PreprocessSuffix): ScreenGrabber.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ScreenGrabber.cpp$(PreprocessSuffix) "ScreenGrabber.cpp"
 
 $(IntermediateDirectory)/ImageAnalyzer.cpp$(ObjectSuffix): ImageAnalyzer.cpp $(IntermediateDirectory)/ImageAnalyzer.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "ImageAnalyzer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/ImageAnalyzer.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/ImageAnalyzer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/ImageAnalyzer.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/ImageAnalyzer.cpp$(DependSuffix): ImageAnalyzer.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/ImageAnalyzer.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/ImageAnalyzer.cpp$(DependSuffix) -MM "ImageAnalyzer.cpp"
 
@@ -115,7 +115,7 @@ $(IntermediateDirectory)/ImageAnalyzer.cpp$(PreprocessSuffix): ImageAnalyzer.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ImageAnalyzer.cpp$(PreprocessSuffix) "ImageAnalyzer.cpp"
 
 $(IntermediateDirectory)/QwopAnalyzer.cpp$(ObjectSuffix): QwopAnalyzer.cpp $(IntermediateDirectory)/QwopAnalyzer.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "QwopAnalyzer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/QwopAnalyzer.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/QwopAnalyzer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/QwopAnalyzer.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/QwopAnalyzer.cpp$(DependSuffix): QwopAnalyzer.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/QwopAnalyzer.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/QwopAnalyzer.cpp$(DependSuffix) -MM "QwopAnalyzer.cpp"
 
@@ -123,7 +123,7 @@ $(IntermediateDirectory)/QwopAnalyzer.cpp$(PreprocessSuffix): QwopAnalyzer.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/QwopAnalyzer.cpp$(PreprocessSuffix) "QwopAnalyzer.cpp"
 
 $(IntermediateDirectory)/KeyPresser.cpp$(ObjectSuffix): KeyPresser.cpp $(IntermediateDirectory)/KeyPresser.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "KeyPresser.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/KeyPresser.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/KeyPresser.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/KeyPresser.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/KeyPresser.cpp$(DependSuffix): KeyPresser.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/KeyPresser.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/KeyPresser.cpp$(DependSuffix) -MM "KeyPresser.cpp"
 
@@ -131,7 +131,7 @@ $(IntermediateDirectory)/KeyPresser.cpp$(PreprocessSuffix): KeyPresser.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/KeyPresser.cpp$(PreprocessSuffix) "KeyPresser.cpp"
 
 $(IntermediateDirectory)/QwopBot.cpp$(ObjectSuffix): QwopBot.cpp $(IntermediateDirectory)/QwopBot.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "QwopBot.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/QwopBot.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/QwopBot.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/QwopBot.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/QwopBot.cpp$(DependSuffix): QwopBot.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/QwopBot.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/QwopBot.cpp$(DependSuffix) -MM "QwopBot.cpp"
 
@@ -139,7 +139,7 @@ $(IntermediateDirectory)/QwopBot.cpp$(PreprocessSuffix): QwopBot.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/QwopBot.cpp$(PreprocessSuffix) "QwopBot.cpp"
 
 $(IntermediateDirectory)/DecisionMaker.cpp$(ObjectSuffix): DecisionMaker.cpp $(IntermediateDirectory)/DecisionMaker.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "DecisionMaker.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DecisionMaker.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/DecisionMaker.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DecisionMaker.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/DecisionMaker.cpp$(DependSuffix): DecisionMaker.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/DecisionMaker.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/DecisionMaker.cpp$(DependSuffix) -MM "DecisionMaker.cpp"
 

@@ -45,6 +45,7 @@ void QwopBot::step()
 		Rect roi = imageAnalyzer.searchQwopWindow(scene_object);
 		if(roi.width * roi.height > 10) {
 			status = NEED_RESET;
+			std::cerr<<"Window found. Push enter to start"<<std::endl;
 			std::cin.get() ;
 			keyPresser.focus(roi.x+roi.width/2,roi.y+roi.height/2);
 
