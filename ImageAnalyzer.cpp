@@ -301,7 +301,26 @@ immagine.setTo(0,mask);
 }
 ImageAnalyzer::ImageAnalyzer()
 {
-	Mat img_object = imread( "/home/matteo/Progetti/QwopBot/references/qwopscreen.png", CV_LOAD_IMAGE_GRAYSCALE );
+	
+	Mat img_object;
+	std::string path = "references/qwopscreen.png";
+	
+	for(int i = 0;i<3;i++)
+	{
+		img_object= imread( path, CV_LOAD_IMAGE_GRAYSCALE );
+		path = std::string("../") + path;
+		if(img_object.data)
+			break;
+		
+	}
+	if(!img_object.data)
+	{
+		
+		std::cerr <<"references/qwopscreen.png not found. exiting"<<std::endl;
+		exit(1);
+	}
+
+
 
 	imshow("QWOP",img_object);
 	waitKey(1);

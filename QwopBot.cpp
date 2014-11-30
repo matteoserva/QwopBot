@@ -21,6 +21,7 @@ bool QwopBot::isPaused()
 }
 QwopBot::QwopBot()
 {
+	std::cerr <<"Welcome to QwopBot. waiting for qwop screen"<<std::endl;
 
 	status = SEARCHING_WINDOW;
 
