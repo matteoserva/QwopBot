@@ -142,15 +142,15 @@ Mat ImageAnalyzer::filterShoesAndSign(Mat im)
 
 	inRange(im, cv::Scalar(000,10,100),Scalar(250,80,255), mask);
 
-	Mat element = getStructuringElement( MORPH_ELLIPSE,
+	Mat element1 = getStructuringElement( MORPH_ELLIPSE,
 	                                     Size( 6, 6) );
 
-	erode(mask,mask,element);
-	element = getStructuringElement( MORPH_ELLIPSE,
-	                                 Size( 8, 8) );
+	erode(mask,mask,element1);
+	Mat element = getStructuringElement( MORPH_ELLIPSE,
+	                                 Size( 20, 20) );
 	dilate(mask,mask,element);
-	
-
+erode(mask,mask,element);
+dilate(mask,mask,element1);
 	return mask;
 }
 
@@ -288,6 +288,10 @@ void ImageAnalyzer::removeBackground(cv::Mat immagine)
 	angolosx.setTo(0);
 	Mat angolodx = immagine.rowRange(0,100).colRange(immagine.cols-150,immagine.cols);
 	angolodx.setTo(0);
+	
+	Mat terreno = immagine.rowRange(immagine.rows-20,immagine.rows);
+	terreno.setTo(0);
+	
 	{
 		Mat mask;
 		Mat im2 = immagine.rowRange(immagine.rows-100,immagine.rows);
@@ -296,26 +300,24 @@ void ImageAnalyzer::removeBackground(cv::Mat immagine)
 	}
 	inRange(immagine, cv::Scalar(000,00,000),Scalar(1,1,1), mask);
 	Mat element = getStructuringElement( MORPH_ELLIPSE,Size( 2, 2 ) );
-dilate(mask,mask,element);
-immagine.setTo(0,mask);
+	dilate(mask,mask,element);
+	immagine.setTo(0,mask);
 }
 ImageAnalyzer::ImageAnalyzer()
 {
-	
+
 	Mat img_object;
 	std::string path = "references/qwopscreen.png";
-	
-	for(int i = 0;i<3;i++)
-	{
+
+	for(int i = 0; i<3; i++) {
 		img_object= imread( path, CV_LOAD_IMAGE_GRAYSCALE );
 		path = std::string("../") + path;
 		if(img_object.data)
 			break;
-		
+
 	}
-	if(!img_object.data)
-	{
-		
+	if(!img_object.data) {
+
 		std::cerr <<"references/qwopscreen.png not found. exiting"<<std::endl;
 		exit(1);
 	}
@@ -351,7 +353,7 @@ std::vector<std::pair<char,cv::Point> > ImageAnalyzer::analyzeFrame(cv::Mat &im)
 		Mat mask = filterShoesAndSign(im);
 		vector<vector<Point> > contours = extractContours(mask);
 		keepBiggestContours(contours,4);
-		
+
 		drawContours(im_color,contours);
 		fillResult(result,'S',contours);
 	}

@@ -9,7 +9,7 @@
 
 using namespace cv;
 #include "QwopBot.h"
-
+#include <signal.h>     /* signal, raise, sig_atomic_t */
 
 
 
@@ -49,25 +49,28 @@ void ObjectFeatures::loadImage(cv::Mat image,int numFeatures)
 
 int main()
 {
+	/*
 	//inRange(im, cv::Scalar(120,00,000),Scalar(130,255,255), mask); per il corpo
 	
-	/*Mat im = imread( "/home/matteo/Progetti/QwopBot/references/qwoptest.png" );
+	Mat im = imread( "/home/matteo/Progetti/QwopBot/references/qwoptest.png" );
 	ImageAnalyzer imageAnalyzer;
-	cvtColor(im, im, COLOR_RGB2HSV);
+	//cvtColor(im, im, COLOR_RGB2HSV);
 	
 	imageAnalyzer.saveBackground(im);
-	imageAnalyzer.removeBackground(im);
+	im = imread( "/home/matteo/Progetti/QwopBot/references/qwoptest.png" );
+	/*imageAnalyzer.removeBackground(im);
 	
 	Mat scarpe = imageAnalyzer.filterShoesAndSign(im);
-	Mat corpo = imageAnalyzer.filterHair(im);
+	Mat corpo = imageAnalyzer.filterBody(im);
 	
-	im.setTo(Scalar(0,255,0),corpo);
+	im.setTo(Scalar(0,255,0),scarpe);
 	
 	//blur( im,im, Size(3,3) );
 	//Canny( im,im, 80, 100, 3 );
 	
+	imageAnalyzer.analyzeFrame(im);
 	
-	imshow("QWOP",corpo);
+	imshow("QWOP",im);
 	waitKey(0);
 	return 0;*/
 	nice(1);

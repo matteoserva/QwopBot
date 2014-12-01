@@ -140,8 +140,8 @@ void QwopAnalyzer::calculateVariables()
 
 
 		if(decisionMaker.getStep() > 0 && fabs(angolo -angoloPrevisto>0.5))
-			angolo = angoloPrevisto;
-		if(fabs(omega-omegaVecchio) > 2.0)
+			;//angolo = angoloPrevisto;
+		if(fabs(omega-omegaVecchio) > 5.0)
 			omega = omegaVecchio;
 
 

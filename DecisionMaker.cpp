@@ -3,76 +3,102 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-unsigned int DecisionData::getPosition()
+unsigned int DecisionMaker::getStatePosition(DecisionData & dato)
 {
 	int risultato = 0;
-	if(angolo > 0)
+	/*if(dato.omega > 1.0)
+		risultato +=8;*/
+	if(dato.piedeLontano)
+		risultato += 4;
+	if(dato.angolo > 0)
 		risultato += 2;
-	if(terra)
+	if(dato.terra)
 		risultato++;
 	return risultato;
 }
-unsigned int DecisionData::getMaxPosition()
+unsigned int DecisionMaker::getStatesSize()
 {
-	return 2*2;
+	return 2*2*2;
 }
-
-float DecisionMaker::calcolaProbabilita(unsigned int positivi,unsigned int negativi)
+unsigned int DecisionMaker::getActionsSize()
 {
-	if(knowledgePositivi == 0 || knowledgeNegativi == 0)
-		return 0.1;
-		
-	float media = float(knowledgePositivi)/float(knowledgeNegativi+knowledgePositivi);
-	
-	if(negativi + positivi*20 <50)
-		return 0.25;
-	
-	float mediaKnowledge = float(positivi)/float(negativi+positivi);
-	if(mediaKnowledge<=media)
-	{
-		return sqrt(mediaKnowledge/media) * media;
-		
-	}
-	else
-	{
-		return 1.0-sqrt((1.0-mediaKnowledge)/(1.0-media))*(1.0-media);
-	}
-	
-		
-	
-		
-		
-	
+	return 2;
 }
-
 
 DecisionMaker::DecisionMaker()
 {
-	knowledge.resize(DecisionData::getMaxPosition());
-	for(unsigned int i = 0; i<knowledge.size(); i++) {
-		knowledge[i].first = 1;
-		knowledge[i].second = 0;
-	}
-	knowledgePositivi=knowledge.size();
-	knowledgeNegativi=0;
+	Q = new float[getStatesSize()*getActionsSize()];
+	for(unsigned int i = 0; i<getStatesSize()*getActionsSize(); i++)
+		Q[i] = 0.0;
 	srand(time(NULL));
 }
-
-
-void DecisionMaker::endTurn()
+DecisionMaker::~DecisionMaker()
 {
-	if(step > 0) {
-		analyzeDecisions(true);
-		std::cerr<<"fine turno"<<std::endl;
+	delete [] Q;
+}
+void DecisionMaker::printQ()
+{
+	for(unsigned int i = 0; i<getStatesSize(); i++) {
+		std::cerr << i<<")  ";
+		for(unsigned int j = 0; j<getActionsSize(); j++) {
+			std::cerr<<Q[i*getActionsSize()+j]<<"  ";
+		}
+		std::cerr<<std::endl;
 
 	}
 }
+void DecisionMaker::endTurn()
+{
+	if(step==0 || episode.size() < 2)
+		return;
+
+	auto it = episode.rbegin();
+	unsigned int newState = it->first;
+	float trueReward = -1.0 * step;
+	++it;
+	for(; it!=episode.rend(); ++it) {
+		unsigned int state = it->first;
+		unsigned int action = it->second;
+		float rew = -1;
+		if(action >0) {
+			rew = trueReward;
+			if(trueReward < -0.5)
+			trueReward = step;
+			else if(trueReward > 0.5)
+				trueReward = 0;
+		}
+		reward(state,action,newState,rew);
+
+		newState = state;
+	}
 
 
+	printQ();
+}
+float DecisionMaker::getMaxQ(unsigned int state)
+{
+	float *baseQ = &Q[state*getActionsSize()];
+	float maxQ = baseQ[0];
+	for (unsigned int i = 1; i<getActionsSize(); i++)
+		maxQ = std::max(maxQ,baseQ[i]);
+	return maxQ;
+}
+void DecisionMaker::reward(unsigned int state,unsigned int action,unsigned int newState,float reward)
+{
+	float gamma = 0.2;
+	float rate = 0.2;
+
+	float maxQ = getMaxQ(newState);
+
+	float *baseQ = &Q[state*getActionsSize() + action];
+
+	*baseQ = *baseQ + rate*( reward + gamma * maxQ  -*baseQ);
+
+}
 unsigned int DecisionMaker::getStep()
 {
+	return step;
 
-	return 0;
 }
 void DecisionMaker::printDecisionData(DecisionData & data)
 {
@@ -81,117 +107,43 @@ void DecisionMaker::printDecisionData(DecisionData & data)
 	std::cerr<<"omega: "<<data.omega<<std::endl;
 }
 
-void DecisionMaker::analyzeDecisions(bool dead)
-{
 
-	if(step == 1) {
-		std::cerr <<"compiuto il primo passo ma ignoro"<<std::endl;
-		decisioniPrese.clear();
-	}
-	if(dead) {
-		
-		
-		std::cerr <<"utente morto. questi sono i dati dell'ultimo passo"<<decisioniPrese.size()<<std::endl;
-		
-		for(int i = 0;i<4;i++)
-		{
-			std::cerr << "i: "<<i<<"   V: "<<knowledge[i].first<<"   S:"<<knowledge[i].second<<
-			"   %:"<<(float(knowledge[i].first) / float(knowledge[i].first + knowledge[1].second));
-			std::cerr<<"   prob:" 
-			<< calcolaProbabilita(knowledge[i].first,knowledge[i].second)<<std::endl;
-		}
-		std::cerr<<"%: "<<float(knowledgePositivi)/float(knowledgePositivi+knowledgeNegativi);
-		auto lastStep =decisioniPrese.rbegin();
-
-		for(; lastStep != decisioniPrese.rend() && lastStep->second == 0; ++lastStep) {
-
-		}
-		if(lastStep == decisioniPrese.rend())
-			return;
-			
-		int media = knowledgeNegativi/knowledgePositivi;	
-		knowledge[lastStep->first.getPosition()].second += media;
-		printDecisionData(lastStep->first);
-		return;
-	}
-	if(step==2) {
-		std::cerr<<"compiuto un altro passo, aspetto per vedere cosa succede"<<std::endl;
-	}
-	if(step > 2) {
-		std::cerr<<"compiuto passo, analizzo..."<<std::endl;
-		
-		
-		while(decisioniPrese.begin() != decisioniPrese.end())
-		{
-			auto firstStep =decisioniPrese.begin();
-			int risultato = firstStep->second;
-			int numero = firstStep->first.getPosition();
-			decisioniPrese.pop_front();
-			if(risultato)
-			{
-				knowledge[numero].first++;
-				knowledgePositivi++;
-				break;
-			}
-			else
-			{
-				knowledgeNegativi++;
-				knowledge[numero].second++;
-			}
-			
-		} 
-		
-		
-		
-	}
-
-
-}
 unsigned int DecisionMaker::makeDecision(DecisionData& data)
 {
-	/*int result;
-	float angoloFuturo = data.angolo + data.omega * 0.5;
-	if( data.terra && angoloFuturo > 0.2)
-		result =  1;
-	else
-		result = 0;
+	unsigned int state = getStatePosition(data);
+	unsigned int result = 0;
+	if(episode.size()>0 && episode.back().first == state && rand()%100 < 3 ) {
 
-
-	if(data.piedeLontano)
-		result=0;
-	decisioniPrese.push_back(std::pair<DecisionData,int>(data,result));
-
-	if(result) {
-		std::cerr<<"nuovo passo"<<std::endl;
-		step++;
-		analyzeDecisions(false);
-		//printDecisionData(data);
+		result = episode.back().second;
+		episode.pop_back();
 	}
-	return result;*/
-	int result;
-	auto dati = knowledge[data.getPosition()];
-	
-	float prob= calcolaProbabilita(dati.first,dati.second);
-	if(rand()%1000 <prob*1000.0)
-		result = 1;
-	else
-		result = 0;
 
+	else {
 
-	decisioniPrese.push_back(std::pair<DecisionData,int>(data,result));
+		float differenza = Q[state*getActionsSize() +1] - Q[state*getActionsSize()];
 
-	if(result) {
-		std::cerr<<"nuovo passo"<<std::endl;
-		step++;
-		analyzeDecisions(false);
-		//printDecisionData(data);
+		if(differenza > 0)
+			result = 1;
+		else
+			result = 0;
+
+		float probInversione = 0.02 * 0.1/(0.1 + fabs(differenza) );
+		if(rand()%1000 < 1000.0*probInversione) {
+			result = rand()%getActionsSize();
+
+		}
 	}
+
+	if(result)
+		step++;
+
+	episode.push_back(std::pair<unsigned int,unsigned int>(state,result));
 	return result;
 }
 
 void DecisionMaker::newTurn()
 {
 	std::cerr<<"nuovo turno"<<std::endl;
-	decisioniPrese.clear();
+	episode.clear();
 	step = 0;
 }
