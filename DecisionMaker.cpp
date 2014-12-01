@@ -6,19 +6,23 @@
 unsigned int DecisionMaker::getStatePosition(DecisionData & dato)
 {
 	int risultato = 0;
-	/*if(dato.omega > 1.0)
-		risultato +=8;*/
-	if(dato.piedeLontano)
-		risultato += 4;
-	if(dato.angolo > 0)
-		risultato += 2;
 	if(dato.terra)
 		risultato++;
+		
+	risultato<<=2;
+	if(dato.angolo >-1.0)
+		risultato++;
+	if(dato.angolo>0.0)
+		risultato++;
+	if(dato.angolo>1.0)
+		risultato++;
+	
+	
 	return risultato;
 }
 unsigned int DecisionMaker::getStatesSize()
 {
-	return 2*2*2;
+	return 2*4;
 }
 unsigned int DecisionMaker::getActionsSize()
 {
@@ -27,25 +31,30 @@ unsigned int DecisionMaker::getActionsSize()
 
 DecisionMaker::DecisionMaker()
 {
-	Q = new float[getStatesSize()*getActionsSize()];
+	Qdata = new float[getStatesSize()*getActionsSize()];
 	for(unsigned int i = 0; i<getStatesSize()*getActionsSize(); i++)
-		Q[i] = 0.0;
+		Qdata[i] = 0.0;
 	srand(time(NULL));
 }
 DecisionMaker::~DecisionMaker()
 {
-	delete [] Q;
+	delete [] Qdata;
 }
 void DecisionMaker::printQ()
 {
 	for(unsigned int i = 0; i<getStatesSize(); i++) {
 		std::cerr << i<<")  ";
 		for(unsigned int j = 0; j<getActionsSize(); j++) {
-			std::cerr<<Q[i*getActionsSize()+j]<<"  ";
+			std::cerr<<"j:"<<Q(i,j)<<"  ";
 		}
 		std::cerr<<std::endl;
 
 	}
+}
+
+float & DecisionMaker::Q(unsigned int s,unsigned int a)
+{
+	return Qdata[s*getActionsSize() + a];
 }
 void DecisionMaker::endTurn()
 {
@@ -55,7 +64,7 @@ void DecisionMaker::endTurn()
 	auto it = episode.rbegin();
 	unsigned int newState = it->first;
 	float trueReward = -1.0 * step;
-	++it;
+	
 	for(; it!=episode.rend(); ++it) {
 		unsigned int state = it->first;
 		unsigned int action = it->second;
@@ -77,7 +86,7 @@ void DecisionMaker::endTurn()
 }
 float DecisionMaker::getMaxQ(unsigned int state)
 {
-	float *baseQ = &Q[state*getActionsSize()];
+	float *baseQ = &Qdata[state*getActionsSize()];
 	float maxQ = baseQ[0];
 	for (unsigned int i = 1; i<getActionsSize(); i++)
 		maxQ = std::max(maxQ,baseQ[i]);
@@ -90,7 +99,7 @@ void DecisionMaker::reward(unsigned int state,unsigned int action,unsigned int n
 
 	float maxQ = getMaxQ(newState);
 
-	float *baseQ = &Q[state*getActionsSize() + action];
+	float *baseQ = &Qdata[state*getActionsSize() + action];
 
 	*baseQ = *baseQ + rate*( reward + gamma * maxQ  -*baseQ);
 
@@ -112,7 +121,7 @@ unsigned int DecisionMaker::makeDecision(DecisionData& data)
 {
 	unsigned int state = getStatePosition(data);
 	unsigned int result = 0;
-	if(episode.size()>0 && episode.back().first == state && rand()%100 < 3 ) {
+	if(episode.size()>0 && episode.back().first == state && rand()%100 >3) {
 
 		result = episode.back().second;
 		episode.pop_back();
@@ -120,7 +129,7 @@ unsigned int DecisionMaker::makeDecision(DecisionData& data)
 
 	else {
 
-		float differenza = Q[state*getActionsSize() +1] - Q[state*getActionsSize()];
+		float differenza = Qdata[state*getActionsSize() +1] - Qdata[state*getActionsSize()];
 
 		if(differenza > 0)
 			result = 1;
@@ -132,6 +141,7 @@ unsigned int DecisionMaker::makeDecision(DecisionData& data)
 			result = rand()%getActionsSize();
 
 		}
+		std::cerr<<"stato: "<<state<<"  R: "<<result<<"      prob: "<<probInversione<<std::endl;
 	}
 
 	if(result)

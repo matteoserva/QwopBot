@@ -272,6 +272,7 @@ bool QwopAnalyzer::needStep()
 	data.omega = omegaAvg;
 	data.piedeLontano = piedeLontano;
 	data.elapsed = elapsed;
+	data.altezza = COM.y;
 
 	if(decisionMaker.makeDecision(data))
 		return true;

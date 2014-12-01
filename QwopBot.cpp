@@ -100,7 +100,7 @@ void QwopBot::step()
 
 			keyPresser.qwopPush("");
 			status = TRACKING;
-
+			clock.reset();
 			break;
 		case TRACKING:
 
@@ -110,8 +110,10 @@ void QwopBot::step()
 				keyPresser.qwopPush("qp");
 				status = PIEDE1;
 				pause(1.0);
+				clock.reset();
 			}
-
+			if(clock.secondsSinceLastUpdate() > 5.0)
+				status = NEED_RESET;
 
 
 			break;
@@ -122,7 +124,10 @@ void QwopBot::step()
 				keyPresser.qwopPush("ow");
 				status = TRACKING;
 				pause(1.0);
+				clock.reset();
 			}
+			if(clock.secondsSinceLastUpdate() > 5.0)
+				status = NEED_RESET;
 			break;
 		}
 

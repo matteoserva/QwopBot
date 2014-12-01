@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=matteo
-Date                   :=12/01/14
+Date                   :=12/02/14
 CodeLitePath           :="/home/matteo/.codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -60,7 +60,7 @@ AS       := /usr/bin/as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/ScreenGrabber.cpp$(ObjectSuffix) $(IntermediateDirectory)/ImageAnalyzer.cpp$(ObjectSuffix) $(IntermediateDirectory)/QwopAnalyzer.cpp$(ObjectSuffix) $(IntermediateDirectory)/KeyPresser.cpp$(ObjectSuffix) $(IntermediateDirectory)/QwopBot.cpp$(ObjectSuffix) $(IntermediateDirectory)/DecisionMaker.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/ScreenGrabber.cpp$(ObjectSuffix) $(IntermediateDirectory)/ImageAnalyzer.cpp$(ObjectSuffix) $(IntermediateDirectory)/QwopAnalyzer.cpp$(ObjectSuffix) $(IntermediateDirectory)/KeyPresser.cpp$(ObjectSuffix) $(IntermediateDirectory)/QwopBot.cpp$(ObjectSuffix) $(IntermediateDirectory)/DecisionMaker.cpp$(ObjectSuffix) $(IntermediateDirectory)/StopClock.cpp$(ObjectSuffix) 
 
 
 
@@ -145,6 +145,14 @@ $(IntermediateDirectory)/DecisionMaker.cpp$(DependSuffix): DecisionMaker.cpp
 
 $(IntermediateDirectory)/DecisionMaker.cpp$(PreprocessSuffix): DecisionMaker.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/DecisionMaker.cpp$(PreprocessSuffix) "DecisionMaker.cpp"
+
+$(IntermediateDirectory)/StopClock.cpp$(ObjectSuffix): StopClock.cpp $(IntermediateDirectory)/StopClock.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/matteo/Progetti/QwopBot/StopClock.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/StopClock.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/StopClock.cpp$(DependSuffix): StopClock.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/StopClock.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/StopClock.cpp$(DependSuffix) -MM "StopClock.cpp"
+
+$(IntermediateDirectory)/StopClock.cpp$(PreprocessSuffix): StopClock.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/StopClock.cpp$(PreprocessSuffix) "StopClock.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

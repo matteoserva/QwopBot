@@ -6,6 +6,7 @@ struct DecisionData {
 	float omega;
 	bool piedeLontano;
 	float elapsed;
+	unsigned int altezza;
 
 
 };
@@ -18,12 +19,13 @@ class DecisionMaker
 	unsigned int step;
 	void printDecisionData(DecisionData & data);
 	
-	float *Q;
+	float *Qdata;
 	std::list<std::pair<unsigned int, unsigned int> > episode;
 	void printQ();
 	
 	float getMaxQ(unsigned int);
 	void reward(unsigned int,unsigned int,unsigned int,float);
+	float &Q(unsigned int,unsigned int);
 public:
 	unsigned int makeDecision(DecisionData&);
 	void newTurn();
