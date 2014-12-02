@@ -8,7 +8,7 @@ unsigned int DecisionMaker::getStatePosition(DecisionData & dato)
 	int risultato = 0;
 	if(dato.terra)
 		risultato++;
-		
+
 	risultato<<=2;
 	if(dato.angolo >-1.0)
 		risultato++;
@@ -16,13 +16,15 @@ unsigned int DecisionMaker::getStatePosition(DecisionData & dato)
 		risultato++;
 	if(dato.angolo>1.0)
 		risultato++;
-	
-	
+risultato<<=1;
+	if(dato.piedeLontano)
+		risultato++;
+
 	return risultato;
 }
 unsigned int DecisionMaker::getStatesSize()
 {
-	return 2*4;
+	return 2*4*2;
 }
 unsigned int DecisionMaker::getActionsSize()
 {
@@ -42,10 +44,13 @@ DecisionMaker::~DecisionMaker()
 }
 void DecisionMaker::printQ()
 {
+	//std::cerr.precision(4);
+	
 	for(unsigned int i = 0; i<getStatesSize(); i++) {
 		std::cerr << i<<")  ";
+
 		for(unsigned int j = 0; j<getActionsSize(); j++) {
-			std::cerr<<"j:"<<Q(i,j)<<"  ";
+			std::cerr<<j<<":"<<Q(i,j)<<"\t";
 		}
 		std::cerr<<std::endl;
 
@@ -58,28 +63,33 @@ float & DecisionMaker::Q(unsigned int s,unsigned int a)
 }
 void DecisionMaker::endTurn()
 {
-	if(step==0 || episode.size() < 2)
+	if( episode.size() < 2)
 		return;
 
 	auto it = episode.rbegin();
 	unsigned int newState = it->first;
-	float trueReward = -1.0 * step;
-	
+
+
+	int revStep = 0;
 	for(; it!=episode.rend(); ++it) {
 		unsigned int state = it->first;
 		unsigned int action = it->second;
-		float rew = -1;
-		if(action >0) {
-			rew = trueReward;
-			if(trueReward < -0.5)
-			trueReward = step;
-			else if(trueReward > 0.5)
-				trueReward = 0;
-		}
+		if(action >0)
+			revStep++;
+
+		float rew = 0;
+		if(revStep == 0)
+			rew = -0.1;
+		else if(action > 0 && revStep == 1)
+			rew = -1.0* step;
+		else if(action > 0 && revStep > 2)
+			rew = 1.0 + 0.1*step;
+
 		reward(state,action,newState,rew);
 
 		newState = state;
 	}
+
 
 
 	printQ();
@@ -94,15 +104,16 @@ float DecisionMaker::getMaxQ(unsigned int state)
 }
 void DecisionMaker::reward(unsigned int state,unsigned int action,unsigned int newState,float reward)
 {
-	float gamma = 0.2;
-	float rate = 0.2;
+	std::cerr <<"reward: "<<reward<<"\t";
+	float gamma = 0.6;
+	float rate = 0.5;
 
 	float maxQ = getMaxQ(newState);
 
 	float *baseQ = &Qdata[state*getActionsSize() + action];
+	std::cerr<<"Q: "<<*baseQ<<" reward:"<<reward<<"  maxQ"<<maxQ<<std::endl;
 
 	*baseQ = *baseQ + rate*( reward + gamma * maxQ  -*baseQ);
-
 }
 unsigned int DecisionMaker::getStep()
 {
@@ -136,12 +147,12 @@ unsigned int DecisionMaker::makeDecision(DecisionData& data)
 		else
 			result = 0;
 
-		float probInversione = 0.02 * 0.1/(0.1 + fabs(differenza) );
+		float probInversione = 0.2 * 0.1/(0.1 + fabs(differenza) );
 		if(rand()%1000 < 1000.0*probInversione) {
 			result = rand()%getActionsSize();
 
 		}
-		std::cerr<<"stato: "<<state<<"  R: "<<result<<"      prob: "<<probInversione<<std::endl;
+		std::cerr<<"stato: "<<state<<"  R: "<<result<<"      disobb: "<<probInversione<<std::endl;
 	}
 
 	if(result)
